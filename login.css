@@ -1,0 +1,62 @@
+body {
+    font-family: Arial;
+    font-size: 20px;
+    background-image: linear-gradient(90deg,  #ffffff, #e0e0e0);
+}
+
+.Tela_login{
+	background-color:rgba(0,0,0,0.9);
+	position:absolute;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	padding: 80px;
+	border-radius:15px;
+	color:white;
+}
+
+#login{
+	padding: 15px;
+	border:none;
+	outline:none;
+	font-size: 15px;
+}
+#senha{
+	padding: 15px;
+	border:none;
+	outline:none;
+	font-size: 15px;
+}
+
+
+.button_login{
+	background-color:dodgerblue;
+	border:none;
+	outline:none;	
+	padding: 15px;
+	font-size: 15px;
+	width: 100%;
+	border-radius:8px;
+	color:white;
+	
+}
+
+button:hover{
+	background-color:deepskyblue;
+	cursor: pointer;
+}
+
+a{
+	color: White;
+	text-decoration: none;
+	font-size: 14px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+		
+a:hover{
+	 color:deepskyblue;
+	 text-decoration: none;
+	 cursor: pointer;
+}

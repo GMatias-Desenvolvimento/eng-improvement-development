@@ -1,0 +1,45 @@
+		
+		
+		body{
+				background: radial-gradient(circle, #ffffff, #e0e0e0)
+	     	}	
+		
+		header{
+				color: black;
+				font-family: Verdana;
+				font-size: 25pt;
+				font-weight: bold;
+				font-style: italic;
+				text-align: center;
+				text-decoration: underline;
+			  }
+			  
+		nav{
+				color: black;
+				font-family: Verdana;
+				font-size: 15pt;
+				font-weight: bold;
+				text-align: left;
+		}
+			  
+		.classe1{
+					color: black;
+					font-family: Verdana;
+					font-size: 15pt;
+					font-weight: bold;
+					text-align: left;
+		        }
+			
+		img {
+				filter: brightness(0.9) contrast(1.0);
+			}
+			
+		a{
+			color: black;
+			text-decoration: none;
+		  }
+		
+		a:hover{
+				 color:blue;
+				 text-decoration: none;
+		}

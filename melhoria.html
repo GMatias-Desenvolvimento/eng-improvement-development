@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Melhorias</title>
+    <link rel="stylesheet" type="text/css" href="melhoria.css">
+ 
+</head>
+<body>
+
+<!-- Barra de informações do usuário e logout -->
+<div class="header-info">
+    <div class="usuario-info">
+        Usuário: <span id="nomeUsuario">-</span>
+    </div>
+    <button class="button-logout" onclick="logout()">Sair</button>
+</div>
+
+
+
+<section>
+<div class="box">
+    <form id="meuForm" enctype="multipart/form-data">
+	<header><h2>Melhorias</h2></header><br>
+        <fieldset >
+            <legend>Dados Gerais:</legend>
+            <p>Nome da empresa:<input type="text" name="nomeEmpresa" required size="50"></p>
+            <p>Número de série da máquina:<input type="text" name="numeroSerie" required size="10"></p>
+            <p>Qual modelo da máquina:
+                <select class="cursor" name="modelo">
+                    <option value="Poliroll Hortifruti Pista Dupla">Poliroll Hortifruti Pista Dupla</option>
+                    <option value="Poliroll Saco de Lixo Pista Dupla">Poliroll Saco de Lixo Pista Dupla</option>
+                    <option value="Poliroll Saco de Lixo Simples">Poliroll Saco de Lixo Simples</option>
+                    <option value="Poliroll Hortifruti Simples">Poliroll Hortifruti Simples</option>
+                    <option value="Poliroll 900">Poliroll 900</option>
+                    <option value="Multisac 850">Multisac 850</option>
+                    <option value="Multisac 1100">Multisac 1100</option>
+                    <option value="Multisac 1300">Multisac 1300</option>
+                    <option value="Multisac 1400 - Plástico Bolha">Multisac 1400 - Plástico Bolha</option>
+                    <option value="Multisac 1100 SF">Multisac 1100 SF</option>
+                    <option value="Multisac 1300 SF">Multisac 1300 SF</option>
+                    <option value="Multisac 1700 SF">Multisac 1700 SF</option>
+                    <option value="Multisac 2000 SF">Multisac 2000 SF</option>
+                    <option value="Polisac 1100 CS">Polisac 1100 CS</option>
+                    <option value="Polipouch 500">Polipouch 500</option>
+                </select>
+            </p>
+            <p>Qual controlador:
+                <select class="cursor" name="controlador">
+                    <option value="WEG">WEG</option>
+                    <option value="Sirius">Sirius</option>
+                </select>
+            </p>
+        </fieldset><br>
+		
+        <fieldset>
+            <legend>Dados do Solicitante:</legend>
+            <p>Nome do solicitante:<input type="text" name="nomeSolicitante" required size="50"></p>
+            <p>Departamento de trabalho:<input type="text" name="departamento" required size="50"></p>
+            <p>Data da solicitação:<input class="cursor" type="date" name="dataSolicitacao" required></p>
+            <p><label for="descricaoMelhoria">Descrição da melhoria:</label></p>
+            <textarea id="descricaoMelhoria" name="descricaoMelhoria" placeholder="Descreva com detalhes a melhoria." required cols="70" rows="10"></textarea><br>
+            <p>Anexar arquivo de apoio:  <br>
+                <input type="file" id="arquivo" name="arquivo" class="cursor">
+            </p>
+        </fieldset>
+
+        <p><button class="button_enviar" type="submit">Enviar</button></p>
+    </form><br><br>
+	
+
+</div>
+</section>
+
+<script>
+// ============ VERIFICAÇÃO DE SESSÃO COM PROTEÇÃO MÁXIMA ============
+
+// Variável para rastrear se a página foi carregada corretamente
+let paginaCarregadaCorretamente = false;
+
+// Função para verificar a sessão
+function verificarSessao() {
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    const sessionToken = localStorage.getItem('sessionToken');
+    
+    if (!usuarioLogado || !sessionToken) {
+        // Se não há usuário logado ou token de sessão, redirecionar para login
+        console.log('Sessão não encontrada. Redirecionando para login...');
+        
+        // Limpar completamente o localStorage e sessionStorage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Limpar o histórico
+        for (let i = 0; i < 10; i++) {
+            history.pushState(null, null, window.location.href);
+        }
+        
+        // Redirecionar para login
+        window.location.replace("login.html");
+        return false;
+    }
+    
+    // Exibir o nome do usuário na página
+    document.getElementById('nomeUsuario').textContent = usuarioLogado;
+    paginaCarregadaCorretamente = true;
+    console.log('Sessão verificada para usuário: ' + usuarioLogado);
+    return true;
+}
+
+// Função para fazer logout
+function logout() {
+    if (confirm('Tem certeza que deseja sair?')) {
+        // Limpar completamente a sessão
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Limpar o histórico
+        for (let i = 0; i < 10; i++) {
+            history.pushState(null, null, window.location.href);
+        }
+        
+        alert('Você foi desconectado.');
+        
+        // Redirecionar para login
+        window.location.replace("login.html");
+    }
+}
+
+// Bloquear o botão "Voltar" do navegador
+window.addEventListener('popstate', function(event) {
+    console.log('Tentativa de usar o botão Voltar. Bloqueando...');
+    
+    // Verificar se a sessão ainda é válida
+    if (!localStorage.getItem('usuarioLogado')) {
+        console.log('Sessão inválida. Redirecionando para login...');
+        window.location.replace("login.html");
+    } else {
+        // Se a sessão é válida, empurrar um novo estado para evitar que o usuário volte
+        history.pushState(null, null, window.location.href);
+    }
+});
+
+// Executar verificação de sessão quando a página carrega (load)
+window.addEventListener('load', function() {
+    console.log('Evento load disparado');
+    verificarSessao();
+});
+
+// Executar verificação de sessão quando a página é exibida (pageshow)
+window.addEventListener('pageshow', function(event) {
+    console.log('Evento pageshow disparado. Persisted:', event.persisted);
+    
+    // Sempre verificar a sessão quando a página é exibida
+    if (!paginaCarregadaCorretamente || event.persisted) {
+        console.log('Verificando sessão no pageshow...');
+        verificarSessao();
+    }
+});
+
+// Monitorar mudanças no localStorage para detectar logout em outras abas
+window.addEventListener('storage', function(event) {
+    console.log('Evento storage disparado. Key:', event.key);
+    
+    if (event.key === 'usuarioLogado' && event.newValue === null) {
+        console.log('Logout detectado em outra aba. Redirecionando...');
+        window.location.replace("login.html");
+    }
+});
+
+// ============ FORMULÁRIO DE MELHORIA ============
+const form = document.getElementById('meuForm');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Verificar sessão antes de enviar o formulário
+    if (!localStorage.getItem('usuarioLogado')) {
+        alert('Sua sessão expirou. Por favor, faça login novamente.');
+        window.location.replace("login.html");
+        return;
+    }
+
+    // Declarar as variáveis corretamente
+    const arquivoInput = document.getElementById('arquivo');
+    let arquivoBase64 = "";
+    let arquivoNome = "";
+
+    // Processar arquivo apenas se existir e tiver sido selecionado
+    if (arquivoInput && arquivoInput.files && arquivoInput.files.length > 0) {
+        arquivoNome = arquivoInput.files[0].name;
+        try {
+            arquivoBase64 = await arquivoInput.files[0].arrayBuffer().then(buffer => {
+                let binary = '';
+                const bytes = new Uint8Array(buffer);
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return btoa(binary);
+            });
+        } catch (fileError) {
+            alert('Erro ao processar o arquivo: ' + fileError.message);
+            return;
+        }
+    }
+
+    // Montar objeto de dados
+    const data = {
+        tipo: "melhoria",
+        nomeEmpresa: form.nomeEmpresa.value,
+        numeroSerie: form.numeroSerie.value,
+        modelo: form.modelo.value,
+        controlador: form.controlador.value,
+        nomeSolicitante: form.nomeSolicitante.value,
+        departamento: form.departamento.value,
+        dataSolicitacao: form.dataSolicitacao.value,
+        descricaoMelhoria: form.descricaoMelhoria.value,
+        arquivoBase64: arquivoBase64,
+        arquivoNome: arquivoNome
+    };
+
+    try {
+        // IMPORTANTE: Substitua a URL abaixo pela URL da sua Web App do Google Apps Script
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwyLbjOMDiyzS0Vx0iL7ZJcbeNmqFkcsVBAbTB2z879-9Rd78P1r8LiIq66Hcvt8Ccx/exec', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+            mode: 'no-cors'
+        });
+
+        alert('Formulário enviado com sucesso!');
+        form.reset();
+
+    } catch (error) {
+        alert('Ocorreu um erro ao enviar o formulário: ' + error.message);
+        console.error('Erro detalhado:', error);
+    }
+});
+</script>
+
+</body>
+</html>

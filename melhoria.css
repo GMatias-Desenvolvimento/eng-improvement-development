@@ -1,0 +1,68 @@
+	body{
+				background: radial-gradient(circle, #ffffff, #e0e0e0)
+	     	}	
+		.box{
+			background-color:rgba(0,0,0,0.5);
+			position:absolute;
+			top: 50%;
+			left:50%;
+			transform: translate(-50%,-45%);
+			padding: 25px;
+			border-radius:15px;
+			color:black;
+			font-size:16px;
+		}
+		
+		.header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .usuario-info {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .button-logout {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .button-logout:hover {
+            background-color: #c82333;
+        }
+		
+		  legend{
+				color: black;
+				font-family: Verdana;
+				font-size: 12pt;
+				font-weight: bold;
+				text-decoration: underline;
+		      }
+			  
+		.button_enviar{
+			padding: 8px 16px;
+            background-color: #ffffff;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+		}
+		
+		.button_enviar:hover{
+			 background-color: #e0e0e0;
+        }
+		
+		.cursor{
+			cursor: pointer;
+		}

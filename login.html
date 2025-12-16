@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<title>Login</title>
+		<script src="login.js"></script>
+		<link rel="stylesheet" type="text/css" href="login.css">
+	</head>
+	<body>
+		<div class="Tela_login">
+			<h1>Login</h1>
+			<input type="text" placeholder="Usuário" id="login">
+			<br><br>
+			<input type="password" placeholder="Senha" id="senha">
+			<br><br>
+			<button class="button_login" type="submit" onclick="logar(); return false">Entrar</button>
+			<br><br>
+			<a href="Index.html"><b>Menu Principal</b></a>
+		</div>
+
+		<script>
+			// Limpar o histórico de navegação quando a página de login é carregada
+			window.addEventListener('load', function() {
+				// Limpar completamente o localStorage e sessionStorage
+				localStorage.clear();
+				sessionStorage.clear();
+
+				// Limpar o histórico do navegador
+				// Isso impede que o usuário use os botões "Voltar" e "Avançar" para acessar páginas anteriores
+				for (let i = 0; i < 10; i++) {
+					history.pushState(null, null, window.location.href);
+				}
+
+				console.log('Página de login carregada. Histórico e sessão limpos.');
+			});
+
+			// Monitorar o evento pageshow para garantir que a página de login sempre limpe a sessão
+			window.addEventListener('pageshow', function(event) {
+				console.log('Pageshow na página de login. Persisted:', event.persisted);
+				localStorage.clear();
+				sessionStorage.clear();
+
+				// Limpar o histórico novamente
+				for (let i = 0; i < 10; i++) {
+					history.pushState(null, null, window.location.href);
+				}
+			});
+
+			// Bloquear o botão "Voltar" do navegador
+			window.addEventListener('popstate', function(event) {
+				console.log('Tentativa de usar o botão Voltar. Bloqueando...');
+				// Empurrar um novo estado para evitar que o usuário volte
+				history.pushState(null, null, window.location.href);
+			});
+		</script>
+	</body>
+</html>
