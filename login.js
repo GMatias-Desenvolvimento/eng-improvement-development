@@ -2,38 +2,41 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyLbjOMDiyzS0Vx0iL7ZJcbeNmqFkcsVBAbTB2z879-9Rd78P1r8LiIq66Hcvt8Ccx/exec";
 
 // ===== LOGIN =====
-function logar() {
-    const login = document.getElementById("login").value.trim();
-    const senha = document.getElementById("senha").value.trim();
+function processarLoginJSON(data) {
+  // Blindagem total
+  if (!data || !data.usuario || !data.senha) {
+    return respostaJSON("error", "Dados inválidos");
+  }
 
-    if (!login || !senha) {
-        alert("Preencha usuário e senha");
-        return;
+  const sheet = SpreadsheetApp
+    .openById(SPREADSHEET_ID)
+    .getSheetByName(LOGIN_SHEET_NAME);
+
+  if (!sheet) {
+    return respostaJSON("error", "Aba Login não encontrada");
+  }
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) {
+    return respostaJSON("error", "Nenhum usuário cadastrado");
+  }
+
+  const values = sheet
+    .getRange(2, 1, lastRow - 1, 2)
+    .getValues();
+
+  for (let i = 0; i < values.length; i++) {
+    const usuario = String(values[i][0]).trim();
+    const senha = String(values[i][1]).trim();
+
+    if (usuario === data.usuario && senha === data.senha) {
+      return respostaJSON("ok", "Login autorizado", usuario);
     }
+  }
 
-    const body = new URLSearchParams();
-    body.append("tipo", "login");
-    body.append("usuario", login);
-    body.append("senha", senha);
-
-    fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body: body
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "ok") {
-            localStorage.setItem("usuarioLogado", data.usuario);
-            window.location.href = "melhoria.html";
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Erro de conexão");
-    });
+  return respostaJSON("error", "Usuário ou senha incorretos");
 }
+
 
 
 // ===== LOGOUT =====
