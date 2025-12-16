@@ -3,42 +3,38 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyLbjOMDiyzS0V
 
 // ===== LOGIN =====
 function logar() {
-    const login = document.getElementById('login').value.trim();
-    const senha = document.getElementById('senha').value.trim();
+    const login = document.getElementById("login").value.trim();
+    const senha = document.getElementById("senha").value.trim();
 
     if (!login || !senha) {
-        alert('Por favor, preencha usuário e senha.');
+        alert("Preencha usuário e senha");
         return;
     }
 
+    const body = new URLSearchParams();
+    body.append("tipo", "login");
+    body.append("usuario", login);
+    body.append("senha", senha);
+
     fetch(APPS_SCRIPT_URL, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            tipo: "login",
-            usuario: login,
-            senha: senha
-        })
+        body: body
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === "ok") {
             localStorage.setItem("usuarioLogado", data.usuario);
-            localStorage.setItem("dataLogin", new Date().toISOString());
-
-            alert("Login realizado com sucesso!");
-            window.location.replace("melhoria.html");
+            window.location.href = "melhoria.html";
         } else {
             alert(data.message);
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Erro ao conectar com o servidor.");
+        alert("Erro de conexão");
     });
 }
+
 
 // ===== LOGOUT =====
 function logout() {
