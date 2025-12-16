@@ -2,7 +2,7 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyLbjOMDiyzS0Vx0iL7ZJcbeNmqFkcsVBAbTB2z879-9Rd78P1r8LiIq66Hcvt8Ccx/exec";
 
 // Função para fazer login
-async function logar() {
+function logar() {
     const login = document.getElementById('login').value.trim();
     const senha = document.getElementById('senha').value.trim();
 
@@ -12,49 +12,48 @@ async function logar() {
         return;
     }
 
-    // Dados a enviar para o Apps Script
-    const data = {
-        tipo: "login",
-        usuario: login,
-        senha: senha
-    };
+    // --- NOVA ABORDAGEM: Submissão de Formulário para contornar CORS ---
 
-    try {
-        // Enviar requisição para o Apps Script
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'},
-            mode: 'no-cors'
-        });
-
-        alert('Processando login...');
-        
-        // Aguardar um pouco para garantir que o Apps Script processou
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Armazenar a sessão no localStorage com um timestamp
-        localStorage.setItem('usuarioLogado', login);
-        localStorage.setItem('dataLogin', new Date().toISOString());
-        localStorage.setItem('sessionToken', 'token_' + Date.now());
-
-        alert('Login realizado com sucesso!');
-        
-        // Limpar o histórico antes de redirecionar
-        for (let i = 0; i < 10; i++) {
-            history.pushState(null, null, window.location.href);
-        }
-        
-        // Redirecionar para a página de melhorias usando replace
-        window.location.replace("melhoria.html");
-
-    } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        alert('Ocorreu um erro ao fazer login. Verifique o console para detalhes.');
+    // 1. Criar um formulário dinamicamente
+    let form = document.getElementById('loginForm');
+    if (!form) {
+        form = document.createElement('form');
+        form.id = 'loginForm';
+        form.method = 'POST';
+        form.action = APPS_SCRIPT_URL;
+        form.style.display = 'none'; // Esconder o formulário
+        document.body.appendChild(form);
+    } else {
+        // Limpar campos anteriores
+        form.innerHTML = '';
     }
+
+    // 2. Adicionar campos de input
+    const inputs = [
+        { name: 'tipo', value: 'login' },
+        { name: 'usuario', value: login },
+        { name: 'senha', value: senha }
+    ];
+
+    inputs.forEach(data => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = data.name;
+        input.value = data.value;
+        form.appendChild(input);
+    });
+
+    // 3. Armazenar o usuário no localStorage ANTES de submeter
+    // O Apps Script irá redirecionar, e o JS da página de destino fará a verificação
+    localStorage.setItem('usuarioTentativa', login);
+
+    // 4. Submeter o formulário
+    form.submit();
+
+    // O Apps Script irá redirecionar para 'melhoria.html' ou 'login.html?error=...'
 }
 
-// Função para fazer logout
+// Função para fazer logout (mantida)
 function logout() {
     // Limpar completamente a sessão
     localStorage.clear();
@@ -71,3 +70,63 @@ function logout() {
     window.location.replace("login.html");
 }
 
+// Função para verificar o resultado do login (chamada ao carregar a página)
+window.addEventListener('load', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    const usuarioTentativa = localStorage.getItem('usuarioTentativa');
+    const erro = urlParams.get('error');
+    const msg = urlParams.get('msg');
+    const usuarioRetorno = urlParams.get('usuario');
+
+    // --- Lógica de Pós-Login ---
+    
+    // 1. Se retornou da tentativa de login com sucesso
+    if (usuarioRetorno && usuarioTentativa) {
+        // Armazenar a sessão
+        localStorage.setItem('usuarioLogado', usuarioTentativa);
+        localStorage.setItem('dataLogin', new Date().toISOString());
+        localStorage.setItem('sessionToken', 'token_' + Date.now());
+        localStorage.removeItem('usuarioTentativa'); // Limpar a tentativa
+        
+        alert('Login realizado com sucesso!');
+        
+        // Redirecionar para a página limpa de melhorias
+        window.location.replace("melhoria.html");
+        return;
+    }
+    
+    // 2. Se retornou da tentativa de login com erro
+    if (erro) {
+        alert(msg || 'Usuário ou senha incorretos.');
+        localStorage.removeItem('usuarioTentativa'); // Limpar a tentativa
+        
+        // Limpar os parâmetros de erro da URL
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+        
+        // Focar no campo de senha
+        const senhaInput = document.getElementById('senha');
+        if (senhaInput) {
+            senhaInput.value = '';
+            senhaInput.focus();
+        }
+        return;
+    }
+
+    // --- Lógica de Verificação de Sessão (mantida) ---
+
+    // Verificar se está na página de login e se há uma sessão ativa
+    if (window.location.pathname.includes('login.html')) {
+        if (usuarioLogado) {
+            // Se já está logado, redirecionar para a página de melhorias
+            window.location.replace("melhoria.html");
+        }
+    }
+    
+    // Prevenir navegação pelo botão voltar (mantida)
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href);
+    };
+});
