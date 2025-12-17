@@ -2,59 +2,144 @@
 <html lang="pt-BR">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
-		<title>Login</title>
-		<script src="login.js"></script>
+		<title>Login com Firebase</title>
+		<!-- Mantenha o link para o seu CSS -->
 		<link rel="stylesheet" type="text/css" href="login.css">
+		<style>
+			/* Estilo básico para a mensagem de erro */
+			#error-message {
+				color: red;
+				font-weight: bold;
+				margin-top: 10px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="Tela_login">
 			<h1>Login</h1>
-			<input type="text" placeholder="Usuário" id="login">
+			<!-- O Firebase Authentication usa e-mail como "usuário" por padrão -->
+			<input type="text" placeholder="E-mail" id="login">
 			<br><br>
 			<input type="password" placeholder="Senha" id="senha">
 			<br><br>
-			<button class="button_login" type="submit" onclick="logar(); return false">Entrar</button>
+			<!-- Adicionamos um ID para o botão e removemos o type="submit" para evitar o comportamento padrão de formulário -->
+			<button class="button_login" id="btn-entrar">Entrar</button>
+			
+			<!-- Espaço para exibir mensagens de erro -->
+			<p id="error-message"></p>
+			
 			<br><br>
 			<a href="index.html"><b>Menu Principal</b></a>
 		</div>
 
-		<script>
-			// Limpar o histórico de navegação quando a página de login é carregada
-			window.addEventListener('load', function() {
-				// Limpar completamente o localStorage e sessionStorage
-				localStorage.clear();
-				sessionStorage.clear();
+		<script type="module">
+			// 1. Importar as funções necessárias do Firebase SDK
+			import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+			import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-				// Limpar o histórico do navegador
-				// Isso impede que o usuário use os botões "Voltar" e "Avançar" para acessar páginas anteriores
-				for (let i = 0; i < 10; i++) {
-					history.pushState(null, null, window.location.href);
+			// 2. Configuração do Firebase
+			const firebaseConfig = {
+				apiKey: "AIzaSyCzGowyDJYkr4D2Pe_psZ3rxM21y50wvSA",
+				authDomain: "desenvolvimentoeng.firebaseapp.com",
+				projectId: "desenvolvimentoeng",
+				storageBucket: "desenvolvimentoeng.firebasestorage.app",
+				messagingSenderId: "973102662144",
+				appId: "1:973102662144:web:d8476586a438568e884ee5"
+			};
+
+			// 3. Inicializar o Firebase e o serviço de Autenticação
+			const app = initializeApp(firebaseConfig);
+			const auth = getAuth(app);
+			
+			// Nome do arquivo de destino
+			const DESTINATION_PAGE = "melhoria.html";
+
+			// 4. VERIFICAÇÃO DE ESTADO DE AUTENTICAÇÃO (NOVO)
+			// Se o usuário já estiver logado, redireciona imediatamente para a página de destino.
+			onAuthStateChanged(auth, (user) => {
+				if (user) {
+					// Usuário está logado, redireciona para evitar que ele veja a tela de login
+					window.location.href = DESTINATION_PAGE;
+				} else {
+					// Usuário não está logado, permite que ele veja a tela de login
+					// Opcional: Mostrar o formulário de login se ele estiver escondido
+				}
+			});
+
+
+			// 5. Obter referências aos elementos do DOM
+			const loginInput = document.getElementById('login');
+			const senhaInput = document.getElementById('senha');
+			const entrarButton = document.getElementById('btn-entrar');
+			const errorMessage = document.getElementById('error-message');
+
+			/**
+			 * Função assíncrona para lidar com o processo de login.
+			 */
+			async function handleLogin() {
+				const email = loginInput.value;
+				const password = senhaInput.value;
+
+				// Limpa a mensagem de erro anterior
+				errorMessage.textContent = '';
+
+				// Validação básica
+				if (!email || !password) {
+					errorMessage.textContent = "Por favor, preencha todos os campos.";
+					return;
 				}
 
-				console.log('Página de login carregada. Histórico e sessão limpos.');
-			});
+				try {
+					// Tenta fazer o login com e-mail e senha
+					const userCredential = await signInWithEmailAndPassword(auth, email, password);
+					
+					// Login bem-sucedido
+					console.log("Login bem-sucedido:", userCredential.user);
+					
+					// Redireciona para a tela de melhorias
+					window.location.href = DESTINATION_PAGE; 
 
-			// Monitorar o evento pageshow para garantir que a página de login sempre limpe a sessão
-			window.addEventListener('pageshow', function(event) {
-				console.log('Pageshow na página de login. Persisted:', event.persisted);
-				localStorage.clear();
-				sessionStorage.clear();
+				} catch (error) {
+					// Trata erros de autenticação
+					console.error("Erro de login:", error.code, error.message);
+					
+					let userMessage = "Erro ao fazer login. Verifique o e-mail e a senha.";
 
-				// Limpar o histórico novamente
-				for (let i = 0; i < 10; i++) {
-					history.pushState(null, null, window.location.href);
+					// Mensagens de erro mais amigáveis
+					switch (error.code) {
+						case 'auth/user-not-found':
+						case 'auth/wrong-password':
+							userMessage = "E-mail ou senha inválidos.";
+							break;
+						case 'auth/invalid-email':
+							userMessage = "O formato do e-mail é inválido.";
+							break;
+						case 'auth/too-many-requests':
+							userMessage = "Muitas tentativas falhas. Tente novamente mais tarde.";
+							break;
+						default:
+							userMessage = "Ocorreu um erro inesperado. Tente novamente.";
+							break;
+					}
+					
+					errorMessage.textContent = userMessage;
+				}
+			}
+
+			// 6. Adicionar o listener de evento ao botão
+			entrarButton.addEventListener('click', handleLogin);
+			
+			// Opcional: Adicionar listener para o Enter nos campos de input
+			senhaInput.addEventListener('keypress', (e) => {
+				if (e.key === 'Enter') {
+					handleLogin();
 				}
 			});
-
-			// Bloquear o botão "Voltar" do navegador
-			window.addEventListener('popstate', function(event) {
-				console.log('Tentativa de usar o botão Voltar. Bloqueando...');
-				// Empurrar um novo estado para evitar que o usuário volte
-				history.pushState(null, null, window.location.href);
-			});
+			
 		</script>
 	</body>
 </html>
