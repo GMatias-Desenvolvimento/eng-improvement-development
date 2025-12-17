@@ -56,7 +56,7 @@
             <p><label for="descricaoMelhoria">Descrição da melhoria:</label></p>
             <textarea id="descricaoMelhoria" name="descricaoMelhoria" placeholder="Descreva com detalhes a melhoria" required rows="10"></textarea><br>
             <p>Anexar arquivo de apoio:<br>
-                <input class="cursor" type="file" id="arquivo" name="arquivo">
+                <input class="cursor" type="file" id="arquivo" name="arquivo" multiple>
             </p>
         </fieldset>
 
@@ -77,29 +77,39 @@
 const form = document.getElementById('meuForm');
 
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    // Declarar as variáveis corretamente
     const arquivoInput = document.getElementById('arquivo');
-    let arquivoBase64 = "";
-    let arquivoNome = "";
+    // Usaremos um array para armazenar os dados de todos os arquivos
+    const arquivos = []; 
 
-    // Processar arquivo apenas se existir e tiver sido selecionado
+    // Processar arquivos
     if (arquivoInput && arquivoInput.files && arquivoInput.files.length > 0) {
-        arquivoNome = arquivoInput.files[0].name;
-        try {
-            arquivoBase64 = await arquivoInput.files[0].arrayBuffer().then(buffer => {
-                let binary = '';
-                const bytes = new Uint8Array(buffer);
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return btoa(binary);
-            });
-        } catch (fileError) {
-            alert('Erro ao processar o arquivo: ' + fileError.message);
-            return;
+        
+        // Iterar sobre todos os arquivos selecionados
+        for (const file of arquivoInput.files) {
+            try {
+                // Converte o arquivo para Base64
+                const arquivoBase64 = await file.arrayBuffer().then(buffer => {
+                    let binary = '';
+                    const bytes = new Uint8Array(buffer);
+                    const len = bytes.byteLength;
+                    for (let i = 0; i < len; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    return btoa(binary);
+                });
+                
+                // Adiciona o nome e o conteúdo Base64 ao array
+                arquivos.push({
+                    nome: file.name,
+                    base64: arquivoBase64
+                });
+
+            } catch (fileError) {
+                alert('Erro ao processar o arquivo: ' + file.name + ' - ' + fileError.message);
+                return; // Interrompe o envio se houver erro em algum arquivo
+            }
         }
     }
 
@@ -113,9 +123,11 @@ form.addEventListener('submit', async (e) => {
         departamento: form.departamento.value,
         dataSolicitacao: form.dataSolicitacao.value,
         descricaoMelhoria: form.descricaoMelhoria.value,
-        arquivoBase64: arquivoBase64,
-        arquivoNome: arquivoNome
+        // Agora enviamos o array de arquivos
+        arquivos: arquivos 
     };
+    // ... (O restante do código de envio permanece o mesmo)
+
 
     try {
         // IMPORTANTE: 
