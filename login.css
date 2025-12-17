@@ -1,62 +1,99 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial;
-    font-size: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Tamanho base da fonte */
     background-image: linear-gradient(90deg,  #ffffff, #e0e0e0);
-}
-
-.Tela_login{
-	background-color:rgba(0,0,0,0.9);
-	position:absolute;
-	top: 50%;
-	left:50%;
-	transform: translate(-50%,-50%);
-	padding: 80px;
-	border-radius:15px;
-	color:white;
-}
-
-#login{
-	padding: 15px;
-	border:none;
-	outline:none;
-	font-size: 15px;
-}
-#senha{
-	padding: 15px;
-	border:none;
-	outline:none;
-	font-size: 15px;
-}
-
-
-.button_login{
-	background-color:dodgerblue;
-	border:none;
-	outline:none;	
-	padding: 15px;
-	font-size: 15px;
-	width: 100%;
-	border-radius:8px;
-	color:white;
-	
-}
-
-button:hover{
-	background-color:deepskyblue;
-	cursor: pointer;
-}
-
-a{
-	color: White;
-	text-decoration: none;
-	font-size: 14px;
-	display: flex;
+    /* Garante que o body ocupe toda a altura da viewport */
+    min-height: 100vh; 
+    display: flex; /* Usar flexbox para centralizar */
     justify-content: center;
     align-items: center;
+    padding: 20px; /* Adiciona um padding para telas muito pequenas */
+}
+
+.Tela_login {
+    background-color: rgba(0, 0, 0, 0.9);  
+    padding: 40px; /* Reduzindo o padding inicial para melhor adaptação */
+    border-radius: 15px;
+    color: white;
+    width: 100%; /* Ocupa 100% da largura do contêiner */
+    max-width: 400px; /* Limita a largura máxima para desktop */
+    text-align: center; /* Centraliza o h1 */
+}
+
+.Tela_login h1 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+#login, #senha {
+    padding: 15px;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    width: 100%; /* Ocupa 100% da largura do contêiner */
+    margin-bottom: 15px; /* Espaçamento entre os campos */
+    border-radius: 5px;
+}
+
+
+.button_login {
+    background-color: dodgerblue;
+    border: none;
+    outline: none;
+    padding: 15px;
+    font-size: 1em;
+    width: 100%;
+    border-radius: 8px;
+    color: white;
+    margin-top: 10px;
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.button_login:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: block; /* Garante que ocupe a linha inteira */
+    margin-top: 20px;
 }
 		
-a:hover{
-	 color:deepskyblue;
-	 text-decoration: none;
-	 cursor: pointer;
+a:hover {
+    color: deepskyblue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Estilo para a mensagem de erro */
+#error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+/* Media Query para telas muito pequenas (celulares em modo retrato) */
+@media (max-width: 480px) {
+    .Tela_login {
+        padding: 20px; /* Reduz o padding em telas muito pequenas */
+    }
+    
+    .Tela_login h1 {
+        font-size: 1.5em;
+    }
+    
+    #login, #senha, .button_login {
+        padding: 12px;
+        font-size: 0.9em;
+    }
 }
