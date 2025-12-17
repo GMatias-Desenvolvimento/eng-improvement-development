@@ -1,45 +1,109 @@
-		
-		
-		body{
-				background: radial-gradient(circle, #ffffff, #e0e0e0)
-	     	}	
-		
-		header{
-				color: black;
-				font-family: Verdana;
-				font-size: 25pt;
-				font-weight: bold;
-				font-style: italic;
-				text-align: center;
-				text-decoration: underline;
-			  }
-			  
-		nav{
-				color: black;
-				font-family: Verdana;
-				font-size: 15pt;
-				font-weight: bold;
-				text-align: left;
-		}
-			  
-		.classe1{
-					color: black;
-					font-family: Verdana;
-					font-size: 15pt;
-					font-weight: bold;
-					text-align: left;
-		        }
-			
-		img {
-				filter: brightness(0.9) contrast(1.0);
-			}
-			
-		a{
-			color: black;
-			text-decoration: none;
-		  }
-		
-		a:hover{
-				 color:blue;
-				 text-decoration: none;
-		}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: radial-gradient(circle, #ffffff, #e0e0e0);
+    font-family: Verdana, sans-serif; /* Adicionando fallback */
+    line-height: 1.6; /* Melhorando a legibilidade */
+    padding: 10px; /* Espaçamento geral */
+}
+
+/* Estilo para o conteúdo principal */
+header, nav, section, footer {
+    max-width: 1200px; /* Limite máximo para telas grandes */
+    margin: 0 auto; /* Centraliza o conteúdo */
+    padding: 15px;
+}
+
+header {
+    color: black;
+    font-size: 2em; /* Usando unidade relativa (em) */
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+nav {
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    background-color: #f0f0f0; /* Cor de fundo para destacar o menu */
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+section {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+section p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.classe1 {
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #e0e0e0;
+    padding: 15px;
+    border-top: 2px solid #ccc;
+    font-size: 0.9em;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+img {
+    /* Se houver imagens, garantir que não ultrapassem o contêiner */
+    max-width: 100%;
+    height: auto;
+    filter: brightness(0.9) contrast(1.0);
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: blue;
+    text-decoration: underline; /* Melhorar a usabilidade */
+}
+
+/* Media Query para telas menores (Celulares) */
+@media (max-width: 600px) {
+    header {
+        font-size: 1.5em; /* Reduz o tamanho da fonte do cabeçalho */
+    }
+
+    nav, .classe1 {
+        font-size: 1em; /* Reduz o tamanho da fonte do menu e contato */
+    }
+    
+    section {
+        padding: 10px; /* Reduz o padding da seção */
+    }
+}
+
+/* Media Query para telas médias (Tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    header {
+        font-size: 2em;
+    }
+}
