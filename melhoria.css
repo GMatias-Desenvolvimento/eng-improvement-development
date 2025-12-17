@@ -1,68 +1,134 @@
-	body{
-				background: radial-gradient(circle, #ffffff, #e0e0e0)
-	     	}	
-		.box{
-			background-color:rgba(0,0,0,0.5);
-			position:absolute;
-			top: 50%;
-			left:50%;
-			transform: translate(-50%,-45%);
-			padding: 25px;
-			border-radius:15px;
-			color:black;
-			font-size:16px;
-		}
-		
-		.header-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f0f0f0;
-            border-bottom: 1px solid #ccc;
-        }
-        
-        .usuario-info {
-            font-size: 14px;
-            color: #333;
-        }
-        
-        .button-logout {
-            padding: 8px 16px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .button-logout:hover {
-            background-color: #c82333;
-        }
-		
-		  legend{
-				color: black;
-				font-family: Verdana;
-				font-size: 12pt;
-				font-weight: bold;
-				text-decoration: underline;
-		      }
+
+body{
+	background: radial-gradient(circle, #ffffff, #e0e0e0);
+	font-family: Arial, sans-serif; /* para melhor legibilidade */
+}	
+
+.box{
+	background-color:rgba(0,0,0,0.5);
+	/* posicionamento responsivo */
+	margin: 50px auto; /* Centraliza horizontalmente e adiciona margem superior/inferior */
+	max-width: 800px; /* Largura máxima para telas maiores */
+	width: 90%; /* Ocupa 90% da largura da tela em dispositivos menores */
+	
+	padding: 25px;
+	border-radius:15px;
+	color: white; /* Alterado para branco para contraste com o fundo escuro do box */
+	font-size:16px;
+	box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+}
+
+/* Estilos para o cabeçalho e informações do usuário */
+header h1 {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+	font-size:50px;
+}
+
+#user-info {
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+}
+
+/* Estilos para os elementos de formulário dentro do .box */
+.box p {
+    display: flex;
+    flex-direction: column; /* Empilha o texto e o campo de entrada verticalmente */
+    margin-bottom: 15px;
+    color: white; /* Cor do texto dentro do box */
+}
+
+.box input[type="text"],
+.box input[type="date"],
+.box select,
+.box textarea {
+    width: 100%; /* Ocupa a largura total do container */
+    padding: 10px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333; /* Cor do texto de entrada */
+}
+
+.box textarea {
+    resize: vertical; /* Permite redimensionamento vertical */
+}
+
+/* Estilos originais ajustados */
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+}     
+
+legend{
+	color: white; /* Alterado para branco para contraste com o fundo escuro do box */
+	font-family: Verdana;
+	font-size: 14pt; /* Aumentado um pouco para melhor legibilidade */
+	font-weight: bold;
+	text-decoration: underline;
+	margin-bottom: 15px;
+}
 			  
-		.button_enviar{
-			padding: 8px 16px;
-            background-color: #ffffff;
-            color: black;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-		}
-		
-		.button_enviar:hover{
-			 background-color: #e0e0e0;
-        }
-		
-		.cursor{
-			cursor: pointer;
-		}
+.button_enviar{
+	padding: 10px 20px; /* Aumentado o padding para melhor toque em dispositivos móveis */
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Aumentado o tamanho da fonte */
+    width: 100%; /* Botão de largura total para mobile */
+    margin-top: 10px;
+}
+
+.button_enviar:hover{
+	 background-color: #e0e0e0;
+}
+
+.cursor{
+	cursor: pointer;
+}
+
+.logout-button {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    display: block; /* Garante que o botão ocupe sua própria linha */
+    margin-left: auto;
+    margin-right: auto;
+}
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Media Query para telas muito pequenas (ex: smartphones em modo retrato) */
+@media (max-width: 600px) {
+    .box {
+        width: 95%; /* Ocupa mais espaço em telas muito pequenas */
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .header-info {
+        flex-direction: column; /* Empilha itens do cabeçalho verticalmente */
+        align-items: flex-start;
+    }
+    
+    .button_enviar, .logout-button {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
