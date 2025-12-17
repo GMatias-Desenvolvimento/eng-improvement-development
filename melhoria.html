@@ -2,33 +2,25 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private">
+    <title>Melhorias</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="melhoria.css">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0, private">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Melhorias</title>
-    <link rel="stylesheet" type="text/css" href="melhoria.css">
- 
 </head>
 <body>
-
-<!-- Barra de informações do usuário e logout -->
-<div class="header-info">
-    <div class="usuario-info">
-        Usuário: <span id="nomeUsuario">-</span>
-    </div>
-    <button class="button-logout" onclick="logout()">Sair</button>
-</div>
 
 
 
 <section>
 <div class="box">
+<header><h1>Melhorias</h1></header>
     <form id="meuForm" enctype="multipart/form-data">
-	<header><h2>Melhorias</h2></header><br>
         <fieldset >
             <legend>Dados Gerais:</legend>
-            <p>Nome da empresa:<input type="text" name="nomeEmpresa" required size="50"></p>
-            <p>Número de série da máquina:<input type="text" name="numeroSerie" required size="10"></p>
+            <p>Nome da empresa:<input type="text" name="nomeEmpresa" required ></p>
+            <p>Número de série da máquina:<input type="text" name="numeroSerie" required ></p>
             <p>Qual modelo da máquina:
                 <select class="cursor" name="modelo">
                     <option value="Poliroll Hortifruti Pista Dupla">Poliroll Hortifruti Pista Dupla</option>
@@ -58,131 +50,34 @@
 		
         <fieldset>
             <legend>Dados do Solicitante:</legend>
-            <p>Nome do solicitante:<input type="text" name="nomeSolicitante" required size="50"></p>
-            <p>Departamento de trabalho:<input type="text" name="departamento" required size="50"></p>
-            <p>Data da solicitação:<input class="cursor" type="date" name="dataSolicitacao" required></p>
+            <p>Nome do solicitante:<input type="text" name="nomeSolicitante" required ></p>
+            <p>Departamento de trabalho:<input type="text" name="departamento" required ></p>
+            <p>Data da solicitação:<input type="date" name="dataSolicitacao" required></p>
             <p><label for="descricaoMelhoria">Descrição da melhoria:</label></p>
-            <textarea id="descricaoMelhoria" name="descricaoMelhoria" placeholder="Descreva com detalhes a melhoria." required cols="70" rows="10"></textarea><br>
-            <p>Anexar arquivo de apoio:  <br>
-                <input type="file" id="arquivo" name="arquivo" class="cursor">
+            <textarea id="descricaoMelhoria" name="descricaoMelhoria" placeholder="Descreva com detalhes a melhoria" required rows="10"></textarea><br>
+            <p>Anexar arquivo de apoio:<br>
+                <input class="cursor" type="file" id="arquivo" name="arquivo">
             </p>
         </fieldset>
 
-        <p><button class="button_enviar" type="submit">Enviar</button></p>
+        <p><button type="submit" class="button_enviar">Enviar</button></p>
     </form><br><br>
+		
+	</div>
+	</section>
 	
+	 <!-- Botão de Sair (Logout) -->
+	        <button class="logout-button" id="btn-logout">Sair</button>
+	        
+	        <p id="user-info">Carregando informações do usuário...</p>
+    </div>
 
-</div>
-</section>
 
 <script>
-// ============ VERIFICAÇÃO DE SESSÃO COM PROTEÇÃO MÁXIMA ============
-
-// Variável para rastrear se a página foi carregada corretamente
-let paginaCarregadaCorretamente = false;
-
-// Função para verificar a sessão
-function verificarSessao() {
-    const usuarioLogado = localStorage.getItem('usuarioLogado');
-    const sessionToken = localStorage.getItem('sessionToken');
-    
-    if (!usuarioLogado || !sessionToken) {
-        // Se não há usuário logado ou token de sessão, redirecionar para login
-        console.log('Sessão não encontrada. Redirecionando para login...');
-        
-        // Limpar completamente o localStorage e sessionStorage
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // Limpar o histórico
-        for (let i = 0; i < 10; i++) {
-            history.pushState(null, null, window.location.href);
-        }
-        
-        // Redirecionar para login
-        window.location.replace("login.html");
-        return false;
-    }
-    
-    // Exibir o nome do usuário na página
-    document.getElementById('nomeUsuario').textContent = usuarioLogado;
-    paginaCarregadaCorretamente = true;
-    console.log('Sessão verificada para usuário: ' + usuarioLogado);
-    return true;
-}
-
-// Função para fazer logout
-function logout() {
-    if (confirm('Tem certeza que deseja sair?')) {
-        // Limpar completamente a sessão
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // Limpar o histórico
-        for (let i = 0; i < 10; i++) {
-            history.pushState(null, null, window.location.href);
-        }
-        
-        alert('Você foi desconectado.');
-        
-        // Redirecionar para login
-        window.location.replace("login.html");
-    }
-}
-
-// Bloquear o botão "Voltar" do navegador
-window.addEventListener('popstate', function(event) {
-    console.log('Tentativa de usar o botão Voltar. Bloqueando...');
-    
-    // Verificar se a sessão ainda é válida
-    if (!localStorage.getItem('usuarioLogado')) {
-        console.log('Sessão inválida. Redirecionando para login...');
-        window.location.replace("login.html");
-    } else {
-        // Se a sessão é válida, empurrar um novo estado para evitar que o usuário volte
-        history.pushState(null, null, window.location.href);
-    }
-});
-
-// Executar verificação de sessão quando a página carrega (load)
-window.addEventListener('load', function() {
-    console.log('Evento load disparado');
-    verificarSessao();
-});
-
-// Executar verificação de sessão quando a página é exibida (pageshow)
-window.addEventListener('pageshow', function(event) {
-    console.log('Evento pageshow disparado. Persisted:', event.persisted);
-    
-    // Sempre verificar a sessão quando a página é exibida
-    if (!paginaCarregadaCorretamente || event.persisted) {
-        console.log('Verificando sessão no pageshow...');
-        verificarSessao();
-    }
-});
-
-// Monitorar mudanças no localStorage para detectar logout em outras abas
-window.addEventListener('storage', function(event) {
-    console.log('Evento storage disparado. Key:', event.key);
-    
-    if (event.key === 'usuarioLogado' && event.newValue === null) {
-        console.log('Logout detectado em outra aba. Redirecionando...');
-        window.location.replace("login.html");
-    }
-});
-
-// ============ FORMULÁRIO DE MELHORIA ============
 const form = document.getElementById('meuForm');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    // Verificar sessão antes de enviar o formulário
-    if (!localStorage.getItem('usuarioLogado')) {
-        alert('Sua sessão expirou. Por favor, faça login novamente.');
-        window.location.replace("login.html");
-        return;
-    }
 
     // Declarar as variáveis corretamente
     const arquivoInput = document.getElementById('arquivo');
@@ -210,7 +105,6 @@ form.addEventListener('submit', async (e) => {
 
     // Montar objeto de dados
     const data = {
-        tipo: "melhoria",
         nomeEmpresa: form.nomeEmpresa.value,
         numeroSerie: form.numeroSerie.value,
         modelo: form.modelo.value,
@@ -224,14 +118,16 @@ form.addEventListener('submit', async (e) => {
     };
 
     try {
-        // IMPORTANTE: Substitua a URL abaixo pela URL da sua Web App do Google Apps Script
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwyLbjOMDiyzS0Vx0iL7ZJcbeNmqFkcsVBAbTB2z879-9Rd78P1r8LiIq66Hcvt8Ccx/exec', {
+        // IMPORTANTE: 
+        const response = await fetch('https://script.google.com/macros/s/AKfycbztEnGMRRTmPsfC2DTm9JUUw3Tku5oLyYVn6mfqw5BgF26zQvDr3VSQPOQ9_Nbp2kd2/exec', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'},
-            mode: 'no-cors'
+            mode: 'no-cors' // Importante para evitar problemas de CORS
         });
 
+        // Nota: Com mode: 'no-cors', a resposta será opaca e não poderemos fazer response.json()
+        // Por isso, vamos assumir sucesso se a requisição for enviada sem erro
         alert('Formulário enviado com sucesso!');
         form.reset();
 
@@ -241,6 +137,58 @@ form.addEventListener('submit', async (e) => {
     }
 });
 </script>
+ <script type="module">
+        // 1. Importar as funções necessárias do Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
+        // 2. Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzGowyDJYkr4D2Pe_psZ3rxM21y50wvSA",
+            authDomain: "desenvolvimentoeng.firebaseapp.com",
+            projectId: "desenvolvimentoeng",
+            storageBucket: "desenvolvimentoeng.firebasestorage.app",
+            messagingSenderId: "973102662144",
+            appId: "1:973102662144:web:d8476586a438568e884ee5"
+        };
+
+        // 3. Inicializar o Firebase e o serviço de Autenticação
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        const LOGIN_PAGE = "login.html";
+        const logoutButton = document.getElementById('btn-logout');
+        const userInfo = document.getElementById('user-info');
+
+        // 4. PROTEÇÃO DE ROTA: Verificar o estado de autenticação
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado. Permite acesso e exibe informações.
+                console.log("Usuário logado:", user.email);
+                userInfo.textContent = `Logado como: ${user.email}`;
+            } else {
+                // Usuário NÃO está logado. Redireciona para a página de login.
+                console.log("Usuário não logado. Redirecionando...");
+                window.location.href = LOGIN_PAGE;
+            }
+        });
+
+        // 5. FUNCIONALIDADE DE LOGOUT
+        async function handleLogout() {
+            try {
+                await signOut(auth);
+                // Após o logout, o onAuthStateChanged acima detectará a mudança
+                // e redirecionará automaticamente para a página de login.
+                console.log("Logout realizado com sucesso.");
+            } catch (error) {
+                console.error("Erro ao fazer logout:", error);
+                alert("Ocorreu um erro ao tentar sair. Tente novamente.");
+            }
+        }
+
+        // 6. Adicionar o listener de evento ao botão de Sair
+        logoutButton.addEventListener('click', handleLogout);
+
+    </script>
 </body>
 </html>
