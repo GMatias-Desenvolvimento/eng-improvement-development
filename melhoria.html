@@ -11,8 +11,6 @@
 </head>
 <body>
 
-
-
 <section>
 <div class="box">
 <header><h1>Melhorias</h1></header>
@@ -23,22 +21,35 @@
             <p>Número de série da máquina:<input type="text" name="numeroSerie" required ></p>
             <p>Qual modelo da máquina:
                 <select class="cursor" name="modelo">
-                    <option value="Poliroll Hortifruti Pista Dupla">Poliroll Hortifruti Pista Dupla</option>
-                    <option value="Poliroll Saco de Lixo Pista Dupla">Poliroll Saco de Lixo Pista Dupla</option>
-                    <option value="Poliroll Saco de Lixo Simples">Poliroll Saco de Lixo Simples</option>
-                    <option value="Poliroll Hortifruti Simples">Poliroll Hortifruti Simples</option>
-                    <option value="Poliroll 900">Poliroll 900</option>
-                    <option value="Multisac 850">Multisac 850</option>
-                    <option value="Multisac 1100">Multisac 1100</option>
-                    <option value="Multisac 1300">Multisac 1300</option>
-                    <option value="Multisac 1400 - Plástico Bolha">Multisac 1400 - Plástico Bolha</option>
-                    <option value="Multisac 1100 SF">Multisac 1100 SF</option>
-                    <option value="Multisac 1300 SF">Multisac 1300 SF</option>
-                    <option value="Multisac 1700 SF">Multisac 1700 SF</option>
-                    <option value="Multisac 2000 SF">Multisac 2000 SF</option>
-                    <option value="Polisac 1100 CS">Polisac 1100 CS</option>
-                    <option value="Polipouch 500">Polipouch 500</option>
+					<option value="Multisac 850">Multisac 850</option>
+					<option value="Multisac 1100">Multisac 1100</option>
+					<option value="Multisac 1300">Multisac 1300</option>
+					<option value="Multisac 1400 - Plástico Bolha">Multisac 1400 - Plástico Bolha</option>
+					<option value="Multisac 1100 SF">Multisac 1100 SF</option>
+					<option value="Multisac 1300 SF">Multisac 1300 SF</option>
+					<option value="Multisac 1700 SF">Multisac 1700 SF</option>
+					<option value="Multisac 2000 SF">Multisac 2000 SF</option>
+					<option value="Multiroll">Multiroll</option>
+					<option value="Plastisac 1400 - PD">Plastisac 1400 - PD</option>
+					<option value="Poliblock 1300">Poliblock 1300</option>
 					<option value="Poliflexo">Poliflexo</option>
+					<option value="Polipouch 500">Polipouch 500</option>
+					<option value="Polipouch 750">Polipouch 750</option>
+					<option value="Polipouch 1050">Polipouch 1050</option>
+					<option value="Poliroll 400 - Sem Tubete">Poliroll 400 - Sem Tubete</option>
+					<option value="Poliroll 400 - Tubete">Poliroll 400 - Tubete</option>
+					<option value="Poliroll 900">Poliroll 900</option>
+                    <option value="Poliroll Hortifruti Pista Dupla">Poliroll Hortifruti Pista Dupla</option>
+					<option value="Poliroll Hortifruti Simples">Poliroll Hortifruti Simples</option>
+                    <option value="Poliroll Saco de Lixo Pista Dupla">Poliroll Saco de Lixo Pista Dupla</option>
+                    <option value="Poliroll S. L. 3 Estações com Tambor Elétrico">Poliroll S. L. 3 Estações com Tambor Elétrico</option>
+					<option value="Polisac 1100 CS">Polisac 1100 CS</option>            
+                    <option value="Polisac 1100 - Alça Flex">Polisac 1100 - Alça Flex</option> 
+                    <option value="Polisac 700 - 4 Soldas">Polisac 700 - 4 Soldas</option> 
+                    <option value="Polisac 700 - V">Polisac 700 - V</option> 
+                    <option value="Polisac Wicketer 700">Polisac Wicketer 700</option> 
+                    <option value="Polisac Wicketer 700 - 450CPM">Polisac Wicketer 700 - 450CPM</option>
+					<option value="Polisac Wicketer 700 - CSFR">Polisac Wicketer 700 - CSFR</option>                                                                                                             					
                 </select>
             </p>
             <p>Qual controlador:
@@ -52,7 +63,13 @@
         <fieldset>
             <legend>Dados do Solicitante:</legend>
             <p>Nome do solicitante:<input type="text" name="nomeSolicitante" required ></p>
-            <p>Departamento de trabalho:<input type="text" name="departamento" required ></p>
+            <p>Departamento de trabalho:
+				<select class ="cursor" name="departamento" required>
+					<option value="Assistência Téncica">Assistência Técnica</option>
+					<option value="Eng. Produto">Engenharia Produto</option>
+					<option value="Eng. Produto / Ass. Técnica">Eng. Produto / Ass. Técnica</option>
+			   </select>
+			</p>
             <p>Data da solicitação:<input type="date" name="dataSolicitacao" required></p>
             <p><label for="descricaoMelhoria">Descrição da melhoria:</label></p>
             <textarea id="descricaoMelhoria" name="descricaoMelhoria" placeholder="Descreva com detalhes a melhoria" required rows="10"></textarea><br>
@@ -81,7 +98,7 @@ form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
     const arquivoInput = document.getElementById('arquivo');
-    // Usaremos um array para armazenar os dados de todos os arquivos.
+    // Usaremos um array para armazenar os dados de todos os arquivos
     const arquivos = []; 
 
     // Processar arquivos
